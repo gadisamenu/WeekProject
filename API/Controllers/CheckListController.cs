@@ -2,8 +2,8 @@
 using Application.Features.CheckLists.CQRS.Queries;
 using Application.Features.CheckLists.Dtos;
 using Application.Features.Tasks.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -28,13 +28,14 @@ namespace API.Controllers
             return Ok(await Mediator.Send(new CreateCheckListCommand { CheckListDto = CheckList }));
         }
 
-
+        [Authorize(Policy = "IsCheckListOwner")]
         [HttpPut]
         public async Task<IActionResult> UpdateCheckList(UpdateCheckListDto CheckList)
         {
             return Ok(await Mediator.Send(new UpdateCheckListCommand { CheckListDto = CheckList }));
         }
 
+        [Authorize(Policy = "IsCheckListOwner")]
         [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteActvity(int Id)
         {

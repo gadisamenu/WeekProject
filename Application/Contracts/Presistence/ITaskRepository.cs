@@ -8,7 +8,7 @@ namespace Application.Contracts.Presistence
     // ITaskRepository.cs
     public interface ITaskRepository : IRepository<Domain.Task>
     {
-        Task<IEnumerable<Domain.Task>> GetTasksByUserIdAsync(int userId);
+        Task<IEnumerable<Domain.Task>> GetTasksByUserIdAsync(string userId);
         Task<IEnumerable<Domain.Task>> GetTasksByCompletionStatusAsync(bool completed);
     }
 }
