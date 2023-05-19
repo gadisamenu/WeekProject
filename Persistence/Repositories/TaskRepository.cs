@@ -1,9 +1,5 @@
 using Application.Contracts.Presistence;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 namespace Persistence.Repositories
 {
 
@@ -17,7 +13,7 @@ namespace Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        async Task<IEnumerable<Domain.Task>> ITaskRepository.GetTasksByUserIdAsync(int userId)
+        async Task<IEnumerable<Domain.Task>> ITaskRepository.GetTasksByUserIdAsync(string userId)
         {
             return await _dbContext.Set<Domain.Task>().Where(tsk => tsk.Owner == userId).ToListAsync();
         }

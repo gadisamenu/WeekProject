@@ -1,6 +1,7 @@
 ﻿using Application.Features.Tasks.CQRS.Commands;
 using Application.Features.Tasks.CQRS.Queries;
 using Application.Features.Tasks.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -27,13 +28,14 @@ namespace API.Controllers
             return Ok(await Mediator.Send(new CreateTaskCommand { TaskDto = Task }));
         }
 
-
-        [HttpPut]
+        [Authorize(Policy = "IsTaskOwner")]
+        [HttpPut("{Id}")]
         public async Task<IActionResult> UpdateTask(UpdateTaskDto Task)
         {
             return Ok(await Mediator.Send(new UpdateTaskCommand { TaskDto = Task }));
         }
 
+        [Authorize(Policy = "IsTaskOwner")]
         [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteActvity(int Id)
         {

@@ -12,7 +12,7 @@ namespace Application.UnitTest.Mocks
                  new Domain.Task
                 {
                     Id = 1,
-                    Owner  = 1,
+                    Owner  = "1",
                     Description = "description",
                     StartDate  = "20/2/2023",
                     EndDate  = "22/2/2023",
@@ -22,7 +22,7 @@ namespace Application.UnitTest.Mocks
                 new Domain.Task
                 {
                     Id = 2,
-                    Owner  = 1,
+                    Owner  = "1",
                     Description = "description",
                     StartDate  = "20/2/2022",
                     EndDate  = "22/2/2022",
@@ -65,7 +65,7 @@ namespace Application.UnitTest.Mocks
                 return Tasks.FirstOrDefault((r) => r.Id == Id);
             });
 
-            mockRepo.Setup(r => r.GetTasksByUserIdAsync(It.IsAny<int>())).ReturnsAsync((int userId) =>
+            mockRepo.Setup(r => r.GetTasksByUserIdAsync(It.IsAny<string>())).ReturnsAsync((string userId) =>
             {
                 return Tasks.Where((r) => r.Owner == userId);
             });
