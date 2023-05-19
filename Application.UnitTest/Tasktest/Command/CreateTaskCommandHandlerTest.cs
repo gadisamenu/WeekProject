@@ -6,6 +6,7 @@ using Application.Features.Tasks.Dtos;
 using Application.UnitTest.Mocks;
 using AutoMapper;
 using BlogApp.Application.Profiles;
+using Infrustructure.Services;
 using Moq;
 using Shouldly;
 
@@ -18,6 +19,7 @@ namespace Application.UnitTest.Ratetest.Command
         private readonly Mock<IUnitOfWork> _mockRepo;
         private readonly CreateTaskDto _taskDto;
         private readonly CreateTaskCommandHandler _handler;
+        private readonly UserAccessor _userAccessor;
 
         public CreateTaskCommandHandlerTest()
         {
@@ -37,7 +39,7 @@ namespace Application.UnitTest.Ratetest.Command
                 Description = "description",
             };
 
-            _handler = new CreateTaskCommandHandler(_mockRepo.Object, _mapper);
+            _handler = new CreateTaskCommandHandler(_mockRepo.Object, _mapper,_userAccessor);
 
         }
 
