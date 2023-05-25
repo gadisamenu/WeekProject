@@ -1,11 +1,6 @@
-﻿using Application.Features.CheckLists.Dtos;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System.Runtime.InteropServices.JavaScript;
-using System.Security.Claims;
-using System.Text;
 
 namespace Infrustructure.Services
 {
