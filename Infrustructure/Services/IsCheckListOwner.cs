@@ -22,19 +22,19 @@ namespace Infrustructure.Services
         }
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsCheckListOwner requirement)
         {
-            var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null) return Task.CompletedTask;
+            var userName = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userName == null) return Task.CompletedTask;
 
-            var checkListId = (int)_httpContextAccessor.HttpContext?.Request.RouteValues.SingleOrDefault(x => x.Key == "Id").Value;
+            var checkListId = int.Parse(_httpContextAccessor.HttpContext?.Request.RouteValues.SingleOrDefault(x => x.Key == "Id").Value!.ToString());
 
             if (checkListId == null) return Task.CompletedTask;
 
-            var checkList = _dbContext.Tasks.AsNoTracking()
-                    .SingleOrDefaultAsync(x => x.Id == checkListId)
+            var checkList = _dbContext.CheckLists.AsNoTracking()
+                    .SingleOrDefaultAsync(clst => clst.Id == checkListId && clst.Task.Owner.UserName == userName)
                     .Result;
 
-            if (checkList == null) return Task.CompletedTask;
-            if (checkList.Owner == userId) context.Succeed(requirement);
+            if (checkList != null)
+                context.Succeed(requirement);
 
             return Task.CompletedTask;
         }

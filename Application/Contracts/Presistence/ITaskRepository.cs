@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Domain;
 namespace Application.Contracts.Presistence
 {
 
     // ITaskRepository.cs
-    public interface ITaskRepository : IRepository<Domain.Task>
+    public interface ITaskRepository : IRepository<ETask>
     {
-        Task<IEnumerable<Domain.Task>> GetTasksByUserIdAsync(string userId);
-        Task<IEnumerable<Domain.Task>> GetTasksByCompletionStatusAsync(bool completed);
+        Task<IEnumerable<ETask>> GetTasksByUserIdAsync(string userId);
+        Task<IEnumerable<ETask>> GetTasksByCompletionStatusAsync(bool completed);
+        Task<ETask> GetTaskWithOwner(int Id);
+        Task<IEnumerable<ETask>> GetALlTaskWithOwner();
+        Task<ETask> GetTaskDetailed(int Id);
     }
 }

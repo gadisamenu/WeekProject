@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Features.Tasks.CQRS.Queries
 {
-    public class GetTaskDetailQuery : IRequest<TaskDto>
+    public class GetTaskDetailQuery : IRequest<DetailedTaskDto>
     {
         public int Id { get; set; }
     }

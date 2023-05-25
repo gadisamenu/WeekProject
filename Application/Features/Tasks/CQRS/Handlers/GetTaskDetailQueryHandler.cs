@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Features.Tasks.CQRS.Handlers
 {
-    public class GetTaskDetailQueryHandler : IRequestHandler<GetTaskDetailQuery, TaskDto>
+    public class GetTaskDetailQueryHandler : IRequestHandler<GetTaskDetailQuery, DetailedTaskDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -17,10 +17,10 @@ namespace Application.Features.Tasks.CQRS.Handlers
             _mapper = mapper;
         }
 
-        public async Task<TaskDto> Handle(GetTaskDetailQuery request, CancellationToken cancellationToken)
+        public async Task<DetailedTaskDto> Handle(GetTaskDetailQuery request, CancellationToken cancellationToken)
         {
-            var Task = await _unitOfWork.TaskRepository.GetByIdAsync(request.Id);
-            return _mapper.Map<TaskDto>(Task);
+            var Task = await _unitOfWork.TaskRepository.GetTaskDetailed(request.Id);
+            return _mapper.Map<DetailedTaskDto>(Task);
         }
     }
 }

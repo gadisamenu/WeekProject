@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BlogApp.Application.Profiles;
 using MediatR;
 using Moq;
 using Shouldly;
@@ -9,8 +8,10 @@ using Application.Features.Tasks.CQRS.Handlers;
 using Application.Features.Tasks.Dtos;
 using Application.Features.Tasks.CQRS.Commands;
 using Application.Common.Exceptions;
+using System.Globalization;
+using Application.Profiles;
 
-namespace Application.UnitTest.Ratetest.Command
+namespace Application.UnitTest.Tasktest.Command
 {
     public class DeleteTaskCommandHandlerTest
     {
@@ -28,14 +29,6 @@ namespace Application.UnitTest.Ratetest.Command
                 c.AddProfile<MappingProfile>();
             });
             _mapper = mapperConfig.CreateMapper();
-
-            _taskDto = new CreateTaskDto
-            {
-                Completed = false,
-                EndDate = "20/2/2023",
-                StartDate = "21/2/2023",
-                Description = "description",
-            };
 
             _id = 2;
 

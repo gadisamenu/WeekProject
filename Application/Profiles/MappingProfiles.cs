@@ -3,24 +3,32 @@ using Application.Features.CheckLists.Dtos;
 using Domain;
 using Application.Features.Tasks.Dtos;
 
-namespace BlogApp.Application.Profiles
+namespace Application.Profiles
 {
     public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-            
+
             #region checkList Mapping
             CreateMap<CheckList, CreateCheckListDto>().ReverseMap();
             CreateMap<CheckList, UpdateCheckListDto>().ReverseMap();
             CreateMap<CheckList, CheckListDto>().ReverseMap();
+            CreateMap<CheckList, ProCheckListDto>();
             #endregion checkList     
 
-            #region checkList Mapping
-            CreateMap<Domain.Task, CreateTaskDto>().ReverseMap();
-            CreateMap<Domain.Task, UpdateTaskDto>().ReverseMap();
-            CreateMap<Domain.Task, TaskDto>().ReverseMap();
-            #endregion checkList 
+            #region task Mapping
+            CreateMap<ETask, CreateTaskDto>().ReverseMap();
+            CreateMap<ETask, UpdateTaskDto>().ReverseMap();
+
+            CreateMap<ETask, TaskDto>()
+                .ForMember(tsk => tsk.OwnerId, o => o.MapFrom(o => o.Owner.Id));
+
+            CreateMap<ETask, DetailedTaskDto>();
+            CreateMap<User, UserProfile>();
+            CreateMap<TaskDto, ETask>();
+
+            #endregion task 
         }
     }
 }

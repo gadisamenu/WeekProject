@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BlogApp.Application.Profiles;
 using MediatR;
 using Moq;
 using Shouldly;
@@ -8,6 +7,7 @@ using Application.Contracts.Presistence;
 using Application.Features.CheckLists.CQRS.Handlers;
 using Application.Features.CheckLists.CQRS.Commands;
 using Application.Common.Exceptions;
+using Application.Profiles;
 
 namespace Application.UnitTest.CheckListTest.Command
 {

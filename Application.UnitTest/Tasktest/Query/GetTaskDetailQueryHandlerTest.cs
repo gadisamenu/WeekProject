@@ -2,9 +2,9 @@
 using Application.Features.Tasks.CQRS.Handlers;
 using Application.Features.Tasks.CQRS.Queries;
 using Application.Features.Tasks.Dtos;
+using Application.Profiles;
 using Application.UnitTest.Mocks;
 using AutoMapper;
-using BlogApp.Application.Profiles;
 using Moq;
 using Shouldly;
 

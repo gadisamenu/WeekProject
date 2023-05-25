@@ -19,7 +19,7 @@ namespace Application.Features.Tasks.CQRS.Handlers
 
         public async Task<List<TaskDto>> Handle(GetAllTaskQuery request, CancellationToken cancellationToken)
         {
-            var Tasks = await _unitOfWork.TaskRepository.GetAllAsync();
+            var Tasks = await _unitOfWork.TaskRepository.GetALlTaskWithOwner();
             return _mapper.Map<List<TaskDto>>(Tasks);
         }
     }

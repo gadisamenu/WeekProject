@@ -2,9 +2,9 @@
 using Application.Features.CheckLists.CQRS.Handlers;
 using Application.Features.CheckLists.CQRS.Queries;
 using Application.Features.CheckLists.Dtos;
+using Application.Profiles;
 using Application.UnitTest.Mocks;
 using AutoMapper;
-using BlogApp.Application.Profiles;
 using Moq;
 using Shouldly;
 

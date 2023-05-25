@@ -14,6 +14,7 @@ namespace Infrustructure.Services
     {
         private readonly AppDbContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         public IsTaskOwnerHandler(AppDbContext dbContext,IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -23,21 +24,22 @@ namespace Infrustructure.Services
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsTaskOwner requirement)
         {
-            var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userName= context.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (userId == null) return Task.CompletedTask;
+            if (userName == null) return Task.CompletedTask;
 
-            var taskId = Guid.Parse(_httpContextAccessor.HttpContext?.Request.RouteValues
-                                .SingleOrDefault(x => x.Key == "Id").Value?.ToString());
-
+            var taskId = int.Parse(_httpContextAccessor.HttpContext?.Request.RouteValues
+                                .SingleOrDefault(x => x.Key == "Id").Value!.ToString());
+            
             if (taskId == null) return Task.CompletedTask;
 
+
             var task = _dbContext.Tasks.AsNoTracking()
-                .SingleOrDefaultAsync(x => x.Owner == userId)
+                .SingleOrDefaultAsync(x => x.Id == taskId && x.Owner.UserName == userName)
                 .Result;
 
-            if (task == null) return Task.CompletedTask;
-            context.Succeed(requirement);
+            if (task !=null) 
+                context.Succeed(requirement);
             return Task.CompletedTask;
         }
     }
