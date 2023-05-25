@@ -7,21 +7,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class CheckListController : BasaApiController
+    /* [ApiController]
+     [Authorize(Policy ="IsTa")]
+     [Route("api/tasks/{taskId}/[controller]")]*/
+    public class CheckListsController : BasaApiController
     {
+        [Authorize(Policy = "IsCheckListTaskOwner")]
         [HttpGet] //api/CheckLists
         public async Task<IActionResult> GetCheckList()
         {
             return Ok(await Mediator.Send(new GetAllCheckListQuery()));
         }
 
-
+      /*  [Authorize(Policy = "IsCheckListTaskOwner")]*/
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetCheckList(int Id)
         {
             return Ok(await Mediator.Send(new GetCheckListDetailQuery { Id = Id }));
         }
 
+        [Authorize(Policy = "IsCheckListTaskOwner")]
         [HttpPost]
         public async Task<IActionResult> CreateCheckList(CreateCheckListDto CheckList)
         {
@@ -29,7 +34,7 @@ namespace API.Controllers
         }
 
         [Authorize(Policy = "IsCheckListOwner")]
-        [HttpPut]
+        [HttpPut("{Id}")]
         public async Task<IActionResult> UpdateCheckList(UpdateCheckListDto CheckList)
         {
             return Ok(await Mediator.Send(new UpdateCheckListCommand { CheckListDto = CheckList }));

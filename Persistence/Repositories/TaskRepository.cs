@@ -1,10 +1,11 @@
 using Application.Contracts.Presistence;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 namespace Persistence.Repositories
 {
 
     // ITaskRepository.cs
-    public class TaskRepository : Repository<Domain.Task>,ITaskRepository
+    public class TaskRepository : Repository<ETask>,ITaskRepository
     {
         private readonly AppDbContext _dbContext;
 
@@ -13,14 +14,28 @@ namespace Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        async Task<IEnumerable<Domain.Task>> ITaskRepository.GetTasksByUserIdAsync(string userId)
+        async Task<IEnumerable<ETask>> ITaskRepository.GetTasksByUserIdAsync(string userId)
         {
-            return await _dbContext.Set<Domain.Task>().Where(tsk => tsk.Owner == userId).ToListAsync();
+            return await _dbContext.Set<ETask>().Where(tsk => tsk.Owner.Id == userId).ToListAsync();
         }
 
-        async Task<IEnumerable<Domain.Task>> ITaskRepository.GetTasksByCompletionStatusAsync(bool completed)
+        async Task<IEnumerable<ETask>> ITaskRepository.GetTasksByCompletionStatusAsync(bool completed)
         {
-            return await _dbContext.Set<Domain.Task>().Where(tsk => tsk.Completed).ToListAsync();
+            return await _dbContext.Set<ETask>().Where(tsk => tsk.Completed).ToListAsync();
+        }
+        async Task<ETask> ITaskRepository.GetTaskWithOwner(int Id)
+        {
+            return await _dbContext.Set<ETask>().Include(tsk => tsk.Owner).FirstOrDefaultAsync(tsk => tsk.Id == Id);
+        }
+
+        async Task<IEnumerable<ETask>> ITaskRepository.GetALlTaskWithOwner()
+        {
+            return await _dbContext.Set<ETask>().Include(tsk => tsk.Owner).ToListAsync();
+        }
+
+        async Task<ETask> ITaskRepository.GetTaskDetailed(int Id)
+        {
+            return await _dbContext.Set<ETask>().Include(tsk => tsk.Owner).Include(tsk=>tsk.CheckLists).FirstOrDefaultAsync(tsk => tsk.Id == Id);
         }
     }
 }

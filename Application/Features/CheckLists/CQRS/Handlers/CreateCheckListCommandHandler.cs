@@ -27,7 +27,10 @@ namespace Application.Features.CheckLists.CQRS.Handlers
 
             if (!validationResult.IsValid)  throw new ValidationException("Validation error",validationResult.Errors);
 
+            var task = await _unitOfWork.TaskRepository.GetByIdAsync(request.CheckListDto.TaskId);
+            
             var checkList = _mapper.Map<CheckList>(request.CheckListDto);
+            checkList.Task = task;
 
             checkList = await _unitOfWork.CheckListRepository.AddAsync(checkList);
             if (await _unitOfWork.Save() == 0) throw new AppException("Server error: couldn't save data");

@@ -3,11 +3,10 @@ using Application.Features.Tasks.CQRS.Queries;
 using Application.Features.Tasks.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    public class TaskController : BasaApiController
+    public class TasksController : BasaApiController
     {
         [HttpGet] //api/Tasks
         public async Task<IActionResult> GetTask()

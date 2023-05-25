@@ -30,7 +30,7 @@ namespace Persistence
         }
 
         public DbSet<CheckList> CheckLists { get; set; }
-        public DbSet<Domain.Task> Tasks { get; set; }
+        public DbSet<ETask> Tasks { get; set; }
 
     }
 }

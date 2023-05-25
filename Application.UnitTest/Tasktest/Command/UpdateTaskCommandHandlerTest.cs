@@ -3,12 +3,13 @@ using Application.Contracts.Presistence;
 using Application.Features.Tasks.CQRS.Commands;
 using Application.Features.Tasks.CQRS.Handlers;
 using Application.Features.Tasks.Dtos;
+using Application.Profiles;
 using Application.UnitTest.Mocks;
 using AutoMapper;
-using BlogApp.Application.Profiles;
 using MediatR;
 using Moq;
 using Shouldly;
+using System.Globalization;
 
 namespace Application.UnitTest.Tasktest.Command
 {
@@ -30,8 +31,9 @@ namespace Application.UnitTest.Tasktest.Command
             _taskDto = new UpdateTaskDto
             {
                 Id = 1,
-                StartDate = "20/2/2023",
-                EndDate = "21/2/2023",
+                Title = "Title",
+                StartDate = DateTime.ParseExact("20/02/2023 00:00", "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture),
+                EndDate = DateTime.ParseExact("22/02/2023 00:00", "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture),
                 Description = "description",
             };
 

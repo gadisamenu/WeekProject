@@ -17,14 +17,14 @@ namespace Application.UnitTest.Mocks
                     Id = 1,
                     Title = "checklist1",
                     Description ="this is a CheckList for task ..",
-                    TaskId  = 1,
+                    Task  = new ETask(),
                     Completed = false
                 },
                 new CheckList {
                     Id = 2,
                     Title = "checklist2",
                     Description ="this is a CheckList for task ..",
-                    TaskId  = 1,
+                    Task = new ETask(),
                     Completed = false
                 },
 
@@ -70,7 +70,7 @@ namespace Application.UnitTest.Mocks
 
             mockRepo.Setup(r => r.GetCheckListsByTaskIdAsync(It.IsAny<int>())).ReturnsAsync((int taskId) =>
             {
-                return  CheckLists.Where((r) => r.TaskId == taskId);
+                return  CheckLists.Where((r) => r.Task.Id == taskId);
             });
 
             mockRepo.Setup(r => r.GetCheckListsByCompletionStatusAsync(It.IsAny<bool>())).ReturnsAsync((bool completed) =>

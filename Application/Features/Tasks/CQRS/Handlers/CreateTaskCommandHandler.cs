@@ -6,6 +6,7 @@ using Application.Features.Tasks.Dtos.Validators;
 using AutoMapper;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Features.Tasks.CQRS.Handlers
 {
@@ -14,6 +15,7 @@ namespace Application.Features.Tasks.CQRS.Handlers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IUserAccessor _userAccessor;
+        private readonly UserManager<User> _userManager;
         public CreateTaskCommandHandler(IUnitOfWork UnitOfWork,IMapper Mapper,IUserAccessor userAccessor)
         {
             _unitOfWork = UnitOfWork;
@@ -28,14 +30,15 @@ namespace Application.Features.Tasks.CQRS.Handlers
 
             if (!validationResult.IsValid)  throw new ValidationException("Validation error",validationResult.Errors);
           
-            var Task = _mapper.Map<Domain.Task>(request.TaskDto);
+            var Task = _mapper.Map<ETask>(request.TaskDto);
 
-            var userId = _userAccessor.GetUsername();
-            Task.Owner = userId;
+            var user = _unitOfWork.UserManager.Users.FirstOrDefault(u => u.UserName == _userAccessor.GetUsername());
+
+            Task.Owner = user;
 
             Task = await _unitOfWork.TaskRepository.AddAsync(Task);
             if (await _unitOfWork.Save() == 0) throw  new AppException("Server error: couldn't save data");
-
+            
             return Task.Id;
         }
     }

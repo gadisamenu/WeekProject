@@ -1,16 +1,17 @@
 ﻿using Application.Common.Exceptions;
+using Application.Contracts;
 using Application.Contracts.Presistence;
 using Application.Features.Tasks.CQRS.Commands;
 using Application.Features.Tasks.CQRS.Handlers;
 using Application.Features.Tasks.Dtos;
+using Application.Profiles;
 using Application.UnitTest.Mocks;
 using AutoMapper;
-using BlogApp.Application.Profiles;
-using Infrustructure.Services;
 using Moq;
 using Shouldly;
+using System.Globalization;
 
-namespace Application.UnitTest.Ratetest.Command
+namespace Application.UnitTest.Tasktest.Command
 {
     public class CreateTaskCommandHandlerTest
     {
@@ -19,7 +20,7 @@ namespace Application.UnitTest.Ratetest.Command
         private readonly Mock<IUnitOfWork> _mockRepo;
         private readonly CreateTaskDto _taskDto;
         private readonly CreateTaskCommandHandler _handler;
-        private readonly UserAccessor _userAccessor;
+        private readonly IUserAccessor _userAccessor;
 
         public CreateTaskCommandHandlerTest()
         {
@@ -30,16 +31,18 @@ namespace Application.UnitTest.Ratetest.Command
             });
 
             _mapper = mapperConfig.CreateMapper();
+            _userAccessor = MockUserAccessor.GetUserAccessor().Object;
 
             _taskDto = new CreateTaskDto
             {
+                Title = "Title",
                 Completed = false,
-                StartDate = "20/2/2023",
-                EndDate = "21/2/2023",
+                StartDate = DateTime.ParseExact("20/02/2023 00:00", "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture),
+                EndDate = DateTime.ParseExact("22/02/2023 00:00", "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture),
                 Description = "description",
             };
 
-            _handler = new CreateTaskCommandHandler(_mockRepo.Object, _mapper,_userAccessor);
+            _handler = new CreateTaskCommandHandler(_mockRepo.Object, _mapper, _userAccessor);
 
         }
 
@@ -49,7 +52,7 @@ namespace Application.UnitTest.Ratetest.Command
         {
             var result = await _handler.Handle(new CreateTaskCommand() { TaskDto = _taskDto }, CancellationToken.None);
             result.ShouldBeOfType<int>();
-  
+
             var tasks = await _mockRepo.Object.TaskRepository.GetAllAsync();
             tasks.Count().ShouldBe(3);
 
@@ -59,10 +62,10 @@ namespace Application.UnitTest.Ratetest.Command
         public async Task InvalidTask_Added()
         {
 
-            _taskDto.StartDate = "22/2/2023";
+            _taskDto.StartDate = DateTime.ParseExact("23/02/2023 00:00", "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
 
             await Should.ThrowAsync<ValidationException>
-               ( async () =>  await _handler.Handle(new CreateTaskCommand() { TaskDto = _taskDto }, CancellationToken.None) );
+               (async () => await _handler.Handle(new CreateTaskCommand() { TaskDto = _taskDto }, CancellationToken.None));
 
             var tasks = await _mockRepo.Object.TaskRepository.GetAllAsync();
             tasks.Count().ShouldBe(2);

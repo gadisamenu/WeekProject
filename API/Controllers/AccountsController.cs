@@ -12,11 +12,11 @@ namespace API.Controllers
     [AllowAnonymous]
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountsController : ControllerBase
     {
         private readonly TokenService _tokenService;
         public readonly UserManager<User> _userManager;
-        public AccountController(UserManager<User> userManager, TokenService tokenService)
+        public AccountsController(UserManager<User> userManager, TokenService tokenService)
         {
             _userManager = userManager;
             _tokenService = tokenService;
@@ -26,14 +26,13 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto logiDto)
         {
-
             var user = await _userManager.FindByEmailAsync(logiDto.Email);
-            if (user == null) return Unauthorized();
+            if (user == null) return BadRequest("Wrong Credentials");
 
             var result = await _userManager.CheckPasswordAsync(user, logiDto.Password);
             if (result) return CreateUser(user);
 
-            return Unauthorized();
+            return BadRequest("Wrong Credentials");
  
         }
 
@@ -61,7 +60,6 @@ namespace API.Controllers
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             if (result.Succeeded)
             {
-                Console.WriteLine("here");
                 return CreateUser(user);
             }
             return BadRequest(result.Errors);
@@ -83,6 +81,7 @@ namespace API.Controllers
             {
                 FullName = user.FullName,
                 Email = user.Email,
+                UserName = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
         }

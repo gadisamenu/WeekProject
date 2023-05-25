@@ -49,10 +49,15 @@ namespace Infrustructure
                 {
                     policy.Requirements.Add(new IsCheckListOwner());
                 });
+                opt.AddPolicy("IsCheckListTaskOwner", policy =>
+                {
+                    policy.Requirements.Add(new IsCheckListTaskOwner());
+                });
             });
 
             services.AddTransient<IAuthorizationHandler, IsTaskOwnerHandler>();
             services.AddTransient<IAuthorizationHandler, IsCheckListOwnerHandler>();
+            services.AddTransient<IAuthorizationHandler, IsCheckListTaskOwnerHandler>();
             services.AddScoped<TokenService>();
             services.AddScoped<IUserAccessor, UserAccessor>();
 

@@ -17,7 +17,7 @@ namespace Persistence.Repositories
 
         async Task<IEnumerable<CheckList>> ICheckListRepository.GetCheckListsByTaskIdAsync(int taskId)
         {
-            return await _dbContext.CheckLists.Where(clt => clt.TaskId == taskId).ToListAsync();
+            return await _dbContext.CheckLists.Where(clt => clt.Task.Id == taskId).ToListAsync();
         }
 
         async Task<IEnumerable<CheckList>> ICheckListRepository.GetCheckListsByCompletionStatusAsync(bool completed)
